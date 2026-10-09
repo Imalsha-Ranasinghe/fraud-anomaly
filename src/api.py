@@ -5,6 +5,7 @@ import pandas as pd
 from fastapi import FastAPI
 from pydantic import Field, create_model
 
+from src.metrics import score
 from src.train import FEATURES, META_PATH, MODEL_PATH
 
 app = FastAPI(title="Fraud Detection API")
@@ -23,10 +24,10 @@ def health():
 @app.post("/predict")
 def predict(tx: Transaction):
     row = pd.DataFrame([tx.model_dump()])[FEATURES]
-    score = float(model.decision_function(row)[0])
+    s = float(score(model, row)[0])
     return {
-        "is_fraud": score >= meta["threshold"],
-        "score": score,
+        "is_fraud": s >= meta["threshold"],
+        "score": s,
         "threshold": meta["threshold"],
         "model_version": meta["version"],
     }
