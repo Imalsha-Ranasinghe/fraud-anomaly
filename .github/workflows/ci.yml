@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-api.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-api.txt pytest httpx ruff
+
+      - name: Lint
+        run: ruff check src tests
+
+      - name: Cache dataset
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: creditcard-dataset-v1
+
+      - name: Train model
+        run: python -m src.train
+
+      - name: Test
+        run: pytest -v
+
+      - name: Build Docker image
+        run: docker build -t fraud-api:ci .

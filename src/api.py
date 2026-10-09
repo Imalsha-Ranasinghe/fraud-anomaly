@@ -1,9 +1,11 @@
 import json
+
 import joblib
 import pandas as pd
 from fastapi import FastAPI
 from pydantic import Field, create_model
-from src.train import FEATURES, MODEL_PATH, META_PATH
+
+from src.train import FEATURES, META_PATH, MODEL_PATH
 
 app = FastAPI(title="Fraud Detection API")
 

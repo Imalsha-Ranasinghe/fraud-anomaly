@@ -1,12 +1,18 @@
 import json
+
 import joblib
 import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    average_precision_score,
+    precision_recall_curve,
+    precision_score,
+    recall_score,
+)
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import (average_precision_score, precision_recall_curve,
-                             precision_score, recall_score)
-from src.data import load_transactions, DATA_PATH
+
+from src.data import DATA_PATH, load_transactions
 
 FEATURES = [f"V{i}" for i in range(1, 29)] + ["Amount"]
 ROOT = DATA_PATH.parent.parent

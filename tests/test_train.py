@@ -1,6 +1,7 @@
 from src.data import load_transactions
 from src.train import split_by_time, train
 
+
 def test_split_has_no_time_overlap():
     train_df, test_df = split_by_time(load_transactions())
     assert train_df["Time"].max() <= test_df["Time"].min()
